@@ -1,4 +1,3 @@
-const { request } = require("express");
 const db=require("../models");
 const Tutorial=db.tutorials;
 
@@ -50,23 +49,25 @@ exports.create =(req,res)=>{
     })
     //update tutorial
 
-    //retrieve all tutorials from the DB
-    exports.findAll=(req, res)=>{
-        const {page, size, title} =req.query;
-        var condition = title ? {title: {[Op.like]: `%${title}%`}} :null;
-
-        const {limit, offset} = getPagination(page,size);
-
-        tutorial.findAndCountAll({where: condition, limit, offset})
-        .then(data=>{
-            const response= getPagingData(data,page, limit);
-            res.send(response);
-        })
-        .catch(err=>{
-            res.status(500).send({
-                message:
-                err.message || "An error occured while retrieving tutorials."
-            })
-        })
-    }
+   
 };
+
+ //retrieve all tutorials from the DB
+ exports.findAll=(req, res)=>{
+    const {page, size, title} =req.query;
+    var condition = title ? {title: {[Op.like]: `%${title}%`}} :null;
+
+    const {limit, offset} = getPagination(page,size);
+
+    tutorial.findAndCountAll({where: condition, limit, offset})
+    .then(data=>{
+        const response= getPagingData(data,page, limit);
+        res.send(response);
+    })
+    .catch(err=>{
+        res.status(500).send({
+            message:
+            err.message || "An error occured while retrieving tutorials."
+        })
+    })
+}

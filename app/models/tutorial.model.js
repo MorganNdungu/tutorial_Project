@@ -1,4 +1,4 @@
-const sequelize = (sequelize, Sequelize)=>{
+module.exports = (sequelize, Sequelize)=>{
     const Tutorials= sequelize.define('tutorials', {
         title:{
             type:Sequelize.STRING
