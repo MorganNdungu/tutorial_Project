@@ -40,7 +40,7 @@ exports.create =(req,res)=>{
     //save tutorials in the DB
     Tutorial.create(tutorial)
     .then(data=>{
-        res.status(data);
+        res.send(data);
     })
     .catch(err=>{
         res.status(500).send({
@@ -48,4 +48,25 @@ exports.create =(req,res)=>{
             err.message || "an error occured while creating the tutorial"
         })
     })
+    //update tutorial
+
+    //retrieve all tutorials from the DB
+    exports.findAll=(req, res)=>{
+        const {page, size, title} =req.query;
+        var condition = title ? {title: {[Op.like]: `%${title}%`}} :null;
+
+        const {limit, offset} = getPagination(page,size);
+
+        tutorial.findAndCountAll({where: condition, limit, offset})
+        .then(data=>{
+            const response= getPagingData(data,page, limit);
+            res.send(response);
+        })
+        .catch(err=>{
+            res.status(500).send({
+                message:
+                err.message || "An error occured while retrieving tutorials."
+            })
+        })
+    }
 };
